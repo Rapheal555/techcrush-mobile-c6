@@ -1,13 +1,14 @@
 import { Button } from "@react-navigation/elements";
 
 import { useState } from "react";
-import { Image, ScrollView, Text, View,  } from "react-native";
+import { Image, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import {styles} from "@/styles/main";
+import { styles } from "@/styles/main";
 
 export default function HomeScreen() {
   const [greeting, setGreeting] = useState("Welcome");
+  const [inputValue, setInputValue] = useState("");
 
   const updateGreeting = () => {
     if (greeting === "Welcome") {
@@ -16,8 +17,6 @@ export default function HomeScreen() {
       setGreeting("Welcome");
     }
   };
-
-  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,10 +37,38 @@ export default function HomeScreen() {
         </View>
 
         <Button onPressIn={updateGreeting}>Click me</Button>
+        <View style={styles.box}>
+          <Text style={styles.text}>{inputValue}</Text>
+        </View>
+
+        <View>
+          <Text>Email</Text>
+          <TextInput
+            value={inputValue}
+            onChangeText={(val) => {
+              setInputValue(val);
+            }}
+            autoCapitalize="characters"
+            placeholder="Type here..."
+            style={styles.input}
+          />
+        </View>
+      
+      <View>
+          <Text>Password</Text>
+          <TextInput
+            value={inputValue}
+            onChangeText={(val) => {
+              setInputValue(val);
+            }}
+            autoCapitalize="characters"
+            placeholder="Type here..."
+            style={styles.input}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
 
 
