@@ -1,10 +1,10 @@
 import { ScrollView, Text, View } from "react-native";
 
-export default function Dashboard() {
+export default function Login() {
     return(
         <ScrollView>
             <View>
-                <Text>Welcome to the tabs main page</Text>
+                <Text>Welcome to login page!</Text>
             </View>
         </ScrollView>
     )
