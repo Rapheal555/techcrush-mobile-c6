@@ -1,9 +1,12 @@
 import { MyContext } from "@/context/AuthContext";
+import useStore from "@/store/useStore";
 import { useContext } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 export default function Profile() {
-    const { user } = useContext(MyContext);
+    // const { user } = useContext(MyContext);
+  const user = useStore((state: any) => state.user);
+
 
     return(
         <ScrollView>
