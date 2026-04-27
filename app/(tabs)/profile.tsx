@@ -1,21 +1,47 @@
-import { MyContext } from "@/context/AuthContext";
-import useStore from "@/store/useStore";
-import { useContext } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { fetchPosts } from "@/api/api-client";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Profile() {
-    // const { user } = useContext(MyContext);
-  const user = useStore((state: any) => state.user);
+  const [posts, setPosts] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchPosts();
+      setPosts(data);
+    };
+    fetchData();
+  }, []);
 
-    return(
-        <ScrollView>
+  return (
+    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+      <ScrollView>
+        <View>
+          <Text>Welcome to the tabs profile page</Text>
+          <Text></Text>
+        </View>
+        <View>
+          {posts.length === 0 ? (
+            <ActivityIndicator />
+          ) : (
             <View>
-                <Text>Welcome to the tabs profile page</Text>
-                <Text>
-                    {user.email}
-                </Text>
+              {posts?.map((post: any, i) => {
+                return (
+                  <View
+                    style={{ borderColor: "red", padding: 10, margin: 10 }}
+                    key={i}
+                  >
+                    <Text>Id: {post?.id}</Text>
+                    <Text>Title: {post?.title}</Text>
+                    <Text>Body: {post?.body}</Text>
+                  </View>
+                );
+              })}
             </View>
-        </ScrollView>
-    )
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
