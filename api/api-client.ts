@@ -3,6 +3,7 @@
 const baseUrl = "https://jsonplaceholder.typicode.com";
 
 
+
 export const fetchPosts = async () => {
   try {
     // const response = await fetch(baseUrl+"posts");
@@ -15,3 +16,4 @@ export const fetchPosts = async () => {
     throw error;
   }
 };
+
