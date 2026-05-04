@@ -1,14 +1,20 @@
-import { fetchPosts } from "@/api/api-client";
 import { fetchPostsData } from "@/api/axios-client";
+// import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  SectionList,
+  ScrollView,
+  Text,
+  View,
+  StyleSheet,
+  StatusBar,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 export default function Profile() {
   const [posts, setPosts] = useState([]);
-
- 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +24,25 @@ export default function Profile() {
     fetchData();
   }, []);
 
+  const DATA = [
+    {
+      title: "Main dishes",
+      data: ["Pizza", "Burger", "Risotto"],
+    },
+    {
+      title: "Sides",
+      data: ["French Fries", "Onion Rings", "Fried Shrimps"],
+    },
+    {
+      title: "Drinks",
+      data: ["Water", "Coke", "Beer"],
+    },
+    {
+      title: "Desserts",
+      data: ["Cheese Cake", "Ice Cream"],
+    },
+  ];
+
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
       <ScrollView>
@@ -25,12 +50,39 @@ export default function Profile() {
           <Text>Welcome to the tabs profile page</Text>
           <Text></Text>
         </View>
+        <SectionList
+        // horizontal
+          sections={DATA}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <Text style={styles.title}>{item}</Text>
+            </View>
+          )}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.header}>{title}</Text>
+          )}
+        />
         <View>
           {posts.length === 0 ? (
             <ActivityIndicator />
           ) : (
             <View>
-              {posts?.map((post: any, i) => {
+              <FlatList
+                // horizontal
+                numColumns={2}
+                data={posts}
+                keyExtractor={(item, i) => i.toString()}
+                renderItem={({ item }: any) => (
+                  <View style={{ padding: 20, maxWidth: "50%" }}>
+                    <Text>Id: {item?.id}</Text>
+                    <Text>Title: {item?.title}</Text>
+                    <Text>Body: {item?.body}</Text>
+                  </View>
+                )}
+              />
+
+              {/* {posts?.map((post: any, i) => {
                 return (
                   <View
                     style={{ borderColor: "red", padding: 10, margin: 10 }}
@@ -41,7 +93,7 @@ export default function Profile() {
                     <Text>Body: {post?.body}</Text>
                   </View>
                 );
-              })}
+              })} */}
             </View>
           )}
         </View>
@@ -49,3 +101,23 @@ export default function Profile() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+    marginHorizontal: 16,
+  },
+  item: {
+    backgroundColor: "#f9c2ff",
+    padding: 20,
+    marginVertical: 8,
+  },
+  header: {
+    fontSize: 32,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 24,
+  },
+});
