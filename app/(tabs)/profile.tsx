@@ -4,22 +4,35 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  SectionList,
   ScrollView,
+  SectionList,
+  StatusBar,
+  StyleSheet,
   Text,
   View,
-  StyleSheet,
-  StatusBar,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Profile() {
-  const [posts, setPosts] = useState([]);
+  const [rawData, setRawData] = useState<any>();
+  const [posts, setPosts] = useState<any>([]);
+  const [page, setPage] = useState(1);
+  
+
+  
+  const fetchMoreData = async () => {
+    const skip = page * 30;
+    const data = await fetchPostsData(skip);
+    setPage((prev) => prev + 1);
+    setRawData(data);
+     setPosts((prev:any) => [...prev, ...data?.posts]);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchPostsData();
-      setPosts(data);
+      const data = await fetchPostsData(0);
+      setRawData(data);
+      setPosts(data?.posts);
     };
     fetchData();
   }, []);
@@ -50,8 +63,8 @@ export default function Profile() {
           <Text>Welcome to the tabs profile page</Text>
           <Text></Text>
         </View>
-        <SectionList
-        // horizontal
+        {/* <SectionList
+          // horizontal
           sections={DATA}
           keyExtractor={(item, index) => item + index}
           renderItem={({ item }) => (
@@ -62,14 +75,16 @@ export default function Profile() {
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.header}>{title}</Text>
           )}
-        />
+        /> */}
         <View>
-          {posts.length === 0 ? (
+          {posts?.length === 0 ? (
             <ActivityIndicator />
           ) : (
             <View>
               <FlatList
                 // horizontal
+                onEndReachedThreshold={0.5}
+                onEndReached={fetchMoreData}
                 numColumns={2}
                 data={posts}
                 keyExtractor={(item, i) => i.toString()}
